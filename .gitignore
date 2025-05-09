@@ -1,0 +1,23 @@
+# 忽略生成的结果文件
+static/images/results/*
+
+# 保留results目录本身
+!static/images/results/.gitkeep
+
+# 临时文件目录
+temp/
+
+# Python缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 虚拟环境
+venv/
+env/
+
+# 日志文件
+*.log
+
+# 本地配置
+.env
