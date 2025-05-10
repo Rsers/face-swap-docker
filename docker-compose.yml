@@ -22,6 +22,7 @@ services:
     environment:
       - TZ=Asia/Shanghai
       - PYTHONUNBUFFERED=1 # 确保Python输出不被缓存
+      - HOST_PORT=8001 # 在环境变量中设置主机端口，与上面的端口映射保持一致
     deploy:
       resources:
         limits:
@@ -30,13 +31,13 @@ services:
         reservations:
           cpus: '0.5' # 保证最低CPU
           memory: 1G # 保证最低内存
-    # 添加启动后的端口提醒消息
+    # 添加启动后的端口提醒消息，动态获取端口号
     command: >
-      bash -c "echo ' ================================================================================ 🚀 面部替换与增强API服务已启动! 🌐 API地址: http://localhost:8001 或 http://服务器IP:8001
+      bash -c "echo ' ================================================================================ 🚀 面部替换与增强API服务已启动! 🌐 API地址: http://localhost:${HOST_PORT} 或 http://服务器IP:${HOST_PORT}
 
-      ⚠️  重要提醒: 确保您的防火墙或云服务商安全组已开放8001端口!
+      ⚠️  重要提醒: 确保您的防火墙或云服务商安全组已开放${HOST_PORT}端口!
 
-      📋 API文档: http://localhost:8001/docs 或 http://服务器IP:8001/docs ================================================================================ ' && uvicorn main:app --host 0.0.0.0 --port 8000"
+      📋 API文档: http://localhost:${HOST_PORT}/docs 或 http://服务器IP:${HOST_PORT}/docs ================================================================================ ' && uvicorn main:app --host 0.0.0.0 --port 8000"
 
 volumes:
   model_cache:
