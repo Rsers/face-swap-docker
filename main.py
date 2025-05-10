@@ -105,12 +105,34 @@ def init_gfpgan():
         model_path = os.path.expanduser('~/.gfpgan/weights/GFPGANv1.4.pth')
         os.makedirs(os.path.dirname(model_path), exist_ok=True)
         
-        # 如果模型不存在，从GFPGAN-1.3.8目录复制
+        # 如果模型不存在，尝试下载或使用本地模型
         if not os.path.isfile(model_path):
-            print("GFPGAN模型不存在，正在复制...")
-            gfpgan_path = "/home/ubuntu/GFPGAN-1.3.8/experiments/pretrained_models/GFPGANv1.4.pth"
-            shutil.copy2(gfpgan_path, model_path)
-            print(f"模型已复制到 {model_path}")
+            print("GFPGAN模型不存在，正在查找...")
+            
+            # 首先检查本地gfpgan/weights目录
+            local_path = "gfpgan/weights/GFPGANv1.4.pth"
+            if os.path.isfile(local_path):
+                print(f"在本地目录找到模型，正在复制...")
+                shutil.copy2(local_path, model_path)
+                print(f"模型已复制到 {model_path}")
+            else:
+                # 如果本地没有，尝试从网络下载
+                print(f"本地未找到模型，尝试从GitHub Releases下载...")
+                try:
+                    model_url = "https://github.com/Rsers/face-swap-docker/releases/download/v1.0.0/GFPGANv1.4.pth"
+                    print(f"从 {model_url} 下载模型...")
+                    response = requests.get(model_url, stream=True)
+                    response.raise_for_status()
+                    
+                    with open(model_path, "wb") as f:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            if chunk:
+                                f.write(chunk)
+                    
+                    print(f"模型已下载到 {model_path}")
+                except Exception as download_err:
+                    print(f"模型下载失败: {str(download_err)}")
+                    raise
         
         # 初始化GFPGAN
         gfpgan_enhancer = GFPGANer(

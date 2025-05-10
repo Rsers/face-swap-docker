@@ -8,18 +8,32 @@ services:
     container_name: face-swap-api
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8001:8000"  # 将容器8000端口映射到主机8001端口
     volumes:
-      - ./static:/app/static
-      - ./temp:/app/temp
-      - face_swap_data:/root/.insightface
+      - ./static:/app/static        # 静态文件，包括结果图片
+      - ./temp:/app/temp            # 临时文件
+      - model_cache:/root/.insightface  # insightface模型文件持久化
+      - gfpgan_cache:/root/.gfpgan      # gfpgan模型文件持久化
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8000/" ]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 20s  # 允许容器有20秒启动时间
     environment:
       - TZ=Asia/Shanghai
+      - PYTHONUNBUFFERED=1  # 确保Python输出不被缓存
+    deploy:
+      resources:
+        limits:
+          cpus: '2'           # 限制CPU使用
+          memory: 4G          # 限制内存使用
+        reservations:
+          cpus: '0.5'         # 保证最低CPU
+          memory: 1G          # 保证最低内存
 
 volumes:
-  face_swap_data:
+  model_cache:    # insightface模型文件持久化卷
+    driver: local
+  gfpgan_cache:   # gfpgan模型文件持久化卷
+    driver: local

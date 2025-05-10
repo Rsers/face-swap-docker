@@ -18,19 +18,34 @@ RUN apt-get update && apt-get install -y \
     wget \
     git \
     curl \
+    unzip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # 复制项目文件
 COPY main.py requirements.txt ./
 COPY static/ ./static/
+COPY docs/ ./docs/
+COPY gfpgan/ ./gfpgan/
 
 # 创建必要的目录
 RUN mkdir -p ~/.insightface/models/
+RUN mkdir -p ~/.gfpgan/weights/
 RUN mkdir -p temp
 
-# 下载模型文件
-RUN wget https://github.com/Rsers/face-swap-docker/releases/download/v1.0.0/inswapper_128.onnx -O ~/.insightface/models/inswapper_128.onnx
+# 下载模型文件 - 从GitHub Releases获取
+RUN echo "Downloading model files from GitHub Releases..." && \
+    # 下载并安装inswapper_128.onnx
+    wget -q https://github.com/Rsers/face-swap-docker/releases/download/v1.0.0/inswapper_128.onnx -O ~/.insightface/models/inswapper_128.onnx && \
+    # 下载并安装buffalo_l.zip
+    wget -q https://github.com/Rsers/face-swap-docker/releases/download/v1.0.0/buffalo_l.zip -O /tmp/buffalo_l.zip && \
+    unzip -q /tmp/buffalo_l.zip -d ~/.insightface/models/ && \
+    rm /tmp/buffalo_l.zip && \
+    # 下载并安装GFPGAN模型文件
+    wget -q https://github.com/Rsers/face-swap-docker/releases/download/v1.0.0/GFPGANv1.4.pth -O ~/.gfpgan/weights/GFPGANv1.4.pth && \
+    wget -q https://github.com/Rsers/face-swap-docker/releases/download/v1.0.0/detection_Resnet50_Final.pth -O ~/.gfpgan/weights/detection_Resnet50_Final.pth && \
+    wget -q https://github.com/Rsers/face-swap-docker/releases/download/v1.0.0/parsing_parsenet.pth -O ~/.gfpgan/weights/parsing_parsenet.pth && \
+    echo "All model files downloaded successfully."
 
 # 安装Python依赖
 RUN pip install --no-cache-dir -U pip && \
