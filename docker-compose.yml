@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  face-swap-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: face-swap-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./static:/app/static
+      - ./temp:/app/temp
+      - face_swap_data:/root/.insightface
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    environment:
+      - TZ=Asia/Shanghai
+
+volumes:
+  face_swap_data:
