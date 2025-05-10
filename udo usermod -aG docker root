@@ -1,0 +1,21 @@
+[0;1;32m●[0m docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Sat 2025-05-10 12:32:36 CST; 4min 59s ago
+TriggeredBy: [0;1;32m●[0m docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 14074 (dockerd)
+      Tasks: 13
+     Memory: 24.9M
+     CGroup: /system.slice/docker.service
+             └─14074 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+May 10 12:32:36 VM-0-8-ubuntu dockerd[14074]: time="2025-05-10T12:32:36.472500727+08:00" level=info msg="Loading containers: start."
+May 10 12:32:36 VM-0-8-ubuntu dockerd[14074]: time="2025-05-10T12:32:36.648807970+08:00" level=warning msg="Error (Unable to complete atomic operation, key modified) deleting object [endpoint_count f6917233a23a35908329850e3790ed9ff75b5ebc9924b4dda7a717d76d4eac97], retrying...."
+May 10 12:32:36 VM-0-8-ubuntu dockerd[14074]: time="2025-05-10T12:32:36.681284097+08:00" level=info msg="Loading containers: done."
+May 10 12:32:36 VM-0-8-ubuntu dockerd[14074]: time="2025-05-10T12:32:36.690589857+08:00" level=warning msg="WARNING: No swap limit support"
+May 10 12:32:36 VM-0-8-ubuntu dockerd[14074]: time="2025-05-10T12:32:36.690627357+08:00" level=info msg="Docker daemon" commit=01f442b containerd-snapshotter=false storage-driver=overlay2 version=28.1.1
+May 10 12:32:36 VM-0-8-ubuntu dockerd[14074]: time="2025-05-10T12:32:36.690660068+08:00" level=info msg="Initializing buildkit"
+May 10 12:32:36 VM-0-8-ubuntu dockerd[14074]: time="2025-05-10T12:32:36.710430742+08:00" level=info msg="Completed buildkit initialization"
+May 10 12:32:36 VM-0-8-ubuntu dockerd[14074]: time="2025-05-10T12:32:36.716238775+08:00" level=info msg="Daemon has completed initialization"
+May 10 12:32:36 VM-0-8-ubuntu dockerd[14074]: time="2025-05-10T12:32:36.716302540+08:00" level=info msg="API listen on /run/docker.sock"
+May 10 12:32:36 VM-0-8-ubuntu systemd[1]: Started Docker Application Container Engine.

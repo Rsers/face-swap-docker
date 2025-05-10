@@ -35,6 +35,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -U pip && \
     pip install --no-cache-dir -r requirements.txt
 
+# 安装特定版本的torchvision和basicsr以确保兼容性
+RUN pip uninstall -y torchvision && \
+    pip install --no-cache-dir torchvision==0.11.3 && \
+    pip install --no-cache-dir basicsr
+
 # 下载模型文件 - 从GitHub Releases获取（每个模型单独下载以便更好利用缓存）
 RUN echo "Downloading InsightFace models..." && \
     wget -q --show-progress https://github.com/Rsers/face-swap-docker/releases/download/v1.0.0/inswapper_128.onnx -O ~/.insightface/models/inswapper_128.onnx
